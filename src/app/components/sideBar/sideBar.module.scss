@@ -1,0 +1,30 @@
+.sidebar :global {
+  width: 200px;
+  height: 100vh;
+  background-color: #2c3e50;
+  color: white;
+  padding: 20px;
+  transition: width 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    a {
+      text-decoration: none;
+      color: white;
+      transition: background 0.2s;
+      font-size: 20px;
+      padding: 10px;
+
+      &:hover {
+        padding: 10px;
+        background-color: #34495e;
+      }
+    }
+  }
+}

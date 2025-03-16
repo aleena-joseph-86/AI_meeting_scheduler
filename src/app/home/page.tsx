@@ -1,5 +1,5 @@
-import Profile from "./profile/page";
-import Calendar from "./calendar/page";
+import Profile from "../profile/page";
+import Calendar from "../calendar/page";
 import styles from "./page.module.scss";
 
 export default function HomePage() {

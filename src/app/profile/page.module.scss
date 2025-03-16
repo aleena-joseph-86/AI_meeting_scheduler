@@ -1,0 +1,33 @@
+.profileContainer {
+  max-width: 800px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin: auto;
+
+  .profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .profile-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .profile-section {
+      background: #f9f9f9;
+      padding: 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon {
+      font-size: 24px;
+      color: #007bff;
+    }
+  }
+}
