@@ -1,14 +1,29 @@
 .profileContainer {
-  max-width: 800px;
-  padding: 20px;
+  max-width: 1000px;
+  padding: 30px;
   background: #fff;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   margin: auto;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  }
 
   .profile-header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+
+    h1 {
+      font-size: 28px;
+      color: #222;
+    }
+
+    p {
+      font-size: 16px;
+      color: #666;
+    }
   }
 
   .profile-content {
@@ -17,17 +32,43 @@
     gap: 20px;
 
     .profile-section {
-      background: #f9f9f9;
-      padding: 16px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+      display: flex; /* ✅ Ensures everything stays in one row */
+      align-items: center; /* ✅ Centers icon and text */
+      gap: 12px; /* ✅ Space between icon and text */
+      flex-wrap: nowrap; /* ✅ Prevents text from breaking into a new line */
+      width: 100%;
 
-    .icon {
-      font-size: 24px;
-      color: #007bff;
+      h2 {
+        font-size: 20px;
+        color: #333;
+        margin-bottom: 0;
+      }
+
+      p {
+        font-size: 18px;
+        color: #555;
+      }
+
+      .icon {
+        font-size: 24px;
+        color: #007bff;
+      }
+    }
+  }
+
+  /* ✅ Ensures layout stays intact on mobile */
+  @media (max-width: 768px) {
+    max-width: 95%;
+    padding: 20px;
+
+    .profile-content {
+      gap: 15px;
+
+      .profile-section {
+        flex-direction: row; /* ✅ Ensures icons stay beside text */
+        align-items: center;
+        gap: 10px;
+      }
     }
   }
 }

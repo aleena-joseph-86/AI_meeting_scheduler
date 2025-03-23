@@ -1,40 +1,48 @@
 "use client";
 
 import styles from "./page.module.scss";
-import { FaUser, FaCode, FaLaptopCode, FaMoneyBillWave } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaInfoCircle, FaBriefcase, FaAward } from "react-icons/fa";
 
 export default function Profile() {
   return (
     <div className={styles.profileContainer}>
       <div className="profile-header">
-        <h1>My Profile</h1>
+        <h1>Profile</h1>
+        <p>Manage settings for your profile</p>
       </div>
       <div className="profile-content">
         <div className="profile-section">
-          <div className="profile-section">
-            <FaUser className="icon" />
-            <h2>Name</h2>
-            <p>Aleena Joseph</p>
-          </div>
-          <FaLaptopCode className="icon" />
-          <h2>About Me</h2>
-          <p>
-            I am a 3rd-year BE CSE student exploring full-stack development with
-            experience in the MEAN stack and Next.js.
-          </p>
+          <FaUser className="icon" />
+          <h2>Name:</h2>
+          <p>Vishalini Kamaraj</p>
         </div>
+
         <div className="profile-section">
-          <FaCode className="icon" />
-          <h2>Experience</h2>
-          <p>
-            I have completed a few projects using MEAN stack and Next.js,
-            building scalable and dynamic web applications.
-          </p>
+          <FaEnvelope className="icon" />
+          <h2>Email:</h2>
+          <p>vishalinikamaraj286@gmail.com</p>
         </div>
+
         <div className="profile-section">
-          <FaMoneyBillWave className="icon" />
-          <h2>Pricing</h2>
-          <p>I offer website development services at a minimal cost.</p>
+          <FaBriefcase className="icon" />
+          <h2>Profession:</h2>
+          <p>3rd Year BE CSE Student</p>
+        </div>
+
+        <div className="profile-section">
+          <FaAward className="icon" />
+          <h2>Experience:</h2>
+          <p>MEAN Stack & Next.js Developer</p>
+        </div>
+
+        <div className="profile-section">
+          <FaInfoCircle className="icon" />
+          <h2>About:</h2>
+          <p>
+            I am passionate about full-stack development, specializing in the
+            MEAN stack and Next.js. I enjoy building scalable and efficient web
+            applications.
+          </p>
         </div>
       </div>
     </div>
