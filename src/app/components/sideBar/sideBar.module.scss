@@ -11,6 +11,7 @@
 
   ul {
     display: flex;
+    list-style: none;
     flex-direction: column;
     gap: 20px;
 
@@ -31,4 +32,9 @@
       }
     }
   }
+}
+
+.activeLink {
+  text-decoration: underline !important;
+  font-weight: bold;
 }
