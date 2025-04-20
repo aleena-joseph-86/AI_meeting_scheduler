@@ -12,7 +12,7 @@ export default function Header() {
       </div>
       <div className="header-right">
         <FaUserCircle className="user-icon" />
-        <span>Aleena Joseph</span>
+        <span>Visalini Kamaraj</span>
       </div>
     </header>
   );
