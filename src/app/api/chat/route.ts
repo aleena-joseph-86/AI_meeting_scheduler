@@ -9,9 +9,16 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const output = await processRequest(input.prompt);
-    console.log(output);
-    return NextResponse.json(output, { status: 200 });
+    const rawOutput = await processRequest(input.prompt);
+
+    // Extract json from the rawOutput string
+    const jsonOutput = rawOutput.text.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+    const cleanJson = jsonOutput ? jsonOutput[1] : rawOutput.text;
+
+    const parsedJson = JSON.parse(cleanJson);
+
+    console.log("Parsed JSON output:", parsedJson);
+    return NextResponse.json(parsedJson, { status: 200 });
   } catch (error) {
     console.error("Error fetching code:", error);
     return NextResponse.json(
