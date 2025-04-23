@@ -137,8 +137,7 @@ export default function Chatbot() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           className="chat-input"
-          placeholder="Type a message..."
-        />
+          placeholder="Type a message..." />
         <button onClick={sendMessage} className="send-button">
           Send
         </button>

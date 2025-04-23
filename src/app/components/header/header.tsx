@@ -1,18 +1,23 @@
 "use client";
 
 import styles from "./header.module.scss";
-import { FaRobot, FaUserCircle } from "react-icons/fa";
+import { FaBars, FaRobot, FaUserCircle } from "react-icons/fa";
 
-export default function Header() {
+interface HeaderProps {
+  toggleSidebar: () => void;
+}
+
+export default function Header({ toggleSidebar }: HeaderProps) {
   return (
     <header className={styles.header}>
-      <div className="header-left">
-        <FaRobot className="robot-icon" />
-        <h1>AI Meeting Scheduler</h1>
+      <div className={styles.left}>
+        <FaBars className={styles.hamburger} onClick={toggleSidebar} />
+        <FaRobot className={styles.robotIcon} />
+        <h1 className={styles.title}>AI Meeting Scheduler</h1>
       </div>
-      <div className="header-right">
-        <FaUserCircle className="user-icon" />
-        <span>Visalini Kamaraj</span>
+      <div className={styles.right}>
+        <FaUserCircle className={styles.userIcon} />
+        <span className={styles.userName}>Aleena Joseph</span>
       </div>
     </header>
   );

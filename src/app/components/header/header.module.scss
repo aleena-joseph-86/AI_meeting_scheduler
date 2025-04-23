@@ -1,31 +1,50 @@
-.header :global {
+.header:global {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #d63384;
   color: white;
-  padding: 10px;
-  height: 30px;
-  width: 100%;
+  padding: 0 1rem;
+  height: 60px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
 
-  .header-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
 
-    .robot-icon {
-      font-size: 24px;
-    }
-  }
+}
 
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding-right: 30px;
+.left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
 
-    .user-icon {
-      font-size: 24px;
-    }
-  }
+.right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hamburger {
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: block;
+}
+
+.robotIcon {
+  font-size: 1.5rem;
+}
+
+.title {
+  font-size: 1.2rem;
+}
+
+.userIcon {
+  font-size: 1.5rem;
+}
+
+.userName {
+  font-weight: 500;
 }
