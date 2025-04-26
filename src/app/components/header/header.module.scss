@@ -48,3 +48,21 @@
 .userName {
   font-weight: 500;
 }
+
+.signInButton {
+  background-color: #2980b9;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.signOutButton{
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
