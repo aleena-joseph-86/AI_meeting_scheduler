@@ -179,7 +179,7 @@ export default function Chatbot() {
         }
 
         const professionals = await searchResponse.json();
-
+        console.log("Professionals found:", professionals);
         // Format the response for the chat
         const botResponse: Message = {
           sender: "bot",
@@ -229,22 +229,20 @@ export default function Chatbot() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.messages}>
+      <div className="messages">
         {messages.map((msg, idx) => (
           <div
             key={idx}
-            className={`${styles.message} ${
-              msg.sender === "user" ? styles.user : styles.bot
-            }`}
+            className={`message ${msg.sender === "user" ? "user" : "bot"}`}
           >
             {msg.text}
             {/* Render the list of professionals if present */}
             {msg.sender === "bot" &&
               msg.professionals &&
               msg.professionals.length > 0 && (
-                <div className={styles.professionalsList}>
+                <div className="professionalsList">
                   {msg.professionals.map((prof: any, pIdx: number) => (
-                    <div key={pIdx} className={styles.professionalCard}>
+                    <div key={pIdx} className="professionalCard">
                       <h3>{prof.name}</h3>
                       <p>
                         <strong>Profession:</strong> {prof.profession}
@@ -280,20 +278,16 @@ export default function Chatbot() {
           </div>
         )}
       </div>
-      <div className={styles.inputContainer}>
+      <div className="inputContainer">
         <input
           type="text"
           placeholder="Type your message..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           disabled={loading}
-          className={styles.chatInput}
+          className="chatInput"
         />
-        <button
-          onClick={sendMessage}
-          disabled={loading}
-          className={styles.sendButton}
-        >
+        <button onClick={sendMessage} disabled={loading} className="sendButton">
           Send
         </button>
       </div>

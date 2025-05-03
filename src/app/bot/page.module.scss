@@ -1,9 +1,9 @@
-.container {
+.container :global {
   display: flex;
   flex-direction: column;
-  height: 100vh;
   background-color: #f3f3f3;
   width: 100%;
+  height: 90vh;
 
   .messages {
     flex: 1;
@@ -12,22 +12,60 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+  }
 
-    .message {
-      padding: 12px;
+  .message {
+    padding: 12px;
+    border-radius: 8px;
+    max-width: 60%;
+
+    &.user {
+      background-color: #007bff;
+      color: white;
+      align-self: flex-end; // Right side
+    }
+
+    &.bot {
+      background-color: #e0e0e0;
+      color: black;
+      align-self: flex-start; // Left side
+    }
+  }
+
+  .professionalsList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+
+    .professionalCard {
+      background-color: #f8f9fa;
       border-radius: 8px;
-      max-width: 60%;
+      padding: 16px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-      &.user {
-        background-color: #007bff;
-        color: white;
-        align-self: flex-end;
+      h3 {
+        margin-top: 0;
+        color: #0070f3;
       }
 
-      &.bot {
-        background-color: #e0e0e0;
-        color: black;
-        align-self: flex-start;
+      p {
+        margin: 8px 0;
+      }
+
+      .connectButton {
+        background-color: #0070f3;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 16px;
+        margin-top: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: #0051a8;
+        }
       }
     }
   }
@@ -66,135 +104,7 @@
       outline: none;
     }
 
-    button {
-      margin-left: 12px;
-      padding: 10px 16px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-
-      &:hover {
-        background-color: #0056b3;
-      }
-    }
-  }
-
-  .professionals-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-top: 16px;
-  }
-
-  .professional-card {
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    padding: 16px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-    h3 {
-      margin-top: 0;
-      color: #0070f3;
-    }
-
-    p {
-      margin: 8px 0;
-    }
-
-    .connect-button {
-      background-color: #0070f3;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 8px 16px;
-      margin-top: 8px;
-      cursor: pointer;
-      transition: background-color 0.2s;
-
-      &:hover {
-        background-color: #0051a8;
-      }
-    }
-  }
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.container :global {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  background-color: #f3f3f3;
-  width: 100%;
-
-  .messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    .message {
-      padding: 12px;
-      border-radius: 8px;
-      max-width: 60%;
-
-      &.user {
-        background-color: #007bff;
-        color: white;
-        align-self: flex-end;
-      }
-
-      &.bot {
-        background-color: #e0e0e0;
-        color: black;
-        align-self: flex-start;
-      }
-    }
-  }
-
-  .loader {
-    margin-top: 1rem;
-    text-align: center;
-    font-size: 1rem;
-    color: #666;
-
-    .spinner {
-      margin: 0.5rem auto;
-      width: 24px;
-      height: 24px;
-      border: 4px solid #ccc;
-      border-top-color: #0070f3;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-  }
-
-  .input-container {
-    display: flex;
-    align-items: center;
-    border-top: 1px solid #ccc;
-    padding: 12px;
-    background-color: white;
-    margin: 80px 20px;
-    border-radius: 20px;
-
-    .chat-input {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      outline: none;
-    }
-
-    button {
+    .sendButton {
       margin-left: 12px;
       padding: 10px 16px;
       background-color: #007bff;
