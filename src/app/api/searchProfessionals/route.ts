@@ -1,10 +1,12 @@
-// filepath: c:\RajMadhuramSir\ai-meeting-scheduler\src\app\api\searchProfessionals\route.ts
 import { executeQuery } from "@/app/lib/database/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
     const { profession, skills, limit = 5 } = await req.json();
+    console.log("Received profession:", profession);
+    console.log("Received skills (ignored for filtering):", skills);
+    console.log("Received limit:", limit);
 
     if (!profession) {
       return NextResponse.json(
@@ -13,34 +15,36 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Base query
+    // Normalize profession input (remove hyphens and spaces)
+    const normalizedProfession = profession
+      .toLowerCase()
+      .replace(/[-\s]/g, "");
+
+    // Query only by normalized profession
     let query = `
-      SELECT name, email, profession, skills, experience, years_of_experience, summary
-      FROM profiles
-      WHERE profession LIKE ?
+      SELECT 
+        name, 
+        email, 
+        profession, 
+        skills, 
+        experience, 
+        years_of_experience, 
+        summary 
+      FROM profiles 
+      WHERE REPLACE(REPLACE(LOWER(profession), '-', ''), ' ', '') LIKE ?
+      ORDER BY years_of_experience DESC
+      LIMIT ?
     `;
-    const params: (string | number)[] = [`%${profession}%`];
 
-    // Add skill filtering if skills are provided
-    if (skills && Array.isArray(skills) && skills.length > 0) {
-      // Note: Searching JSON arrays can be database-specific.
-      // This example assumes skills are stored as a JSON string like '["skill1", "skill2"]'
-      // and uses FIND_IN_SET or similar logic might be needed depending on DB and structure.
-      // A simpler LIKE approach for demonstration:
-      skills.forEach((skill) => {
-        query += ` AND skills LIKE ?`;
-        params.push(`%${skill}%`);
-      });
-    }
+    const params: (string | number)[] = [`%${normalizedProfession}%`, limit];
 
-    // Add ordering (e.g., by years of experience) and limit
-    query += ` ORDER BY years_of_experience DESC LIMIT ?`;
-    params.push(limit);
+    console.log("Final SQL Query:", query);
+    console.log("Final SQL Params:", params);
 
-    const results = await executeQuery(query, params);
+    const [rows] = await executeQuery(query, params);
+    console.log("Raw DB Results:", rows);
 
-    // Ensure skills are parsed back to an array if stored as JSON string
-    const profiles = (results as any[]).map((profile) => ({
+    const profiles = (rows as any[]).map((profile) => ({
       ...profile,
       skills:
         typeof profile.skills === "string"

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import styles from "./page.module.scss"; // Ensure this matches your file structure
+import styles from "./page.module.scss"; 
 
 type Message = {
   sender: "user" | "bot";
@@ -145,13 +145,13 @@ export default function Chatbot() {
   const handleProfessionalSearch = async (userInput: string) => {
     setLoading(true);
     try {
-      // First, call the chat API to understand the intent and extract details
+      
       const chatResponse = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           prompt: userInput,
-          type: "professional_search", // Add a type hint if needed by your chat API
+          type: "professional_search", 
         }),
       });
 
@@ -160,17 +160,19 @@ export default function Chatbot() {
       }
 
       const chatData = await chatResponse.json();
-
-      // Check if the chat API identified it as a recommendation request
+      console.log("Chat API response:", chatData);
+      
       if (chatData.isRecommendationRequest && chatData.requestedProfession) {
-        // Now, search the database using the extracted details
+        console.log("Extracted profession:", chatData.requestedProfession);
+        console.log("Extracted skills:", chatData.requestedSkills);
+        
         const searchResponse = await fetch("/api/searchProfessionals", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             profession: chatData.requestedProfession,
-            skills: chatData.requestedSkills || [], // Pass skills if extracted
-            limit: 5, // Get top 5
+            skills: chatData.requestedSkills || [], 
+            limit: 5, 
           }),
         });
 
@@ -180,7 +182,7 @@ export default function Chatbot() {
 
         const professionals = await searchResponse.json();
         console.log("Professionals found:", professionals);
-        // Format the response for the chat
+        
         const botResponse: Message = {
           sender: "bot",
           text:
@@ -199,12 +201,12 @@ export default function Chatbot() {
                     ? ` with skills: ${chatData.requestedSkills.join(", ")}`
                     : ""
                 }.`,
-          professionals: professionals, // Attach professionals data to the message
+          professionals: professionals, 
         };
 
         setMessages((prev) => [...prev, botResponse]);
       } else {
-        // Handle cases where the intent wasn't recognized as a search
+        
         setMessages((prev) => [
           ...prev,
           {

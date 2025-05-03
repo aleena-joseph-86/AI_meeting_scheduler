@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { processRequest } from "@/app/lib/bot";
-import { extractSearchIntent } from "@/app/lib/intent";
+import { processRequest, processRecommendationRequest } from "@/app/lib/bot";
 
 export async function POST(req: NextRequest) {
   const input = await req.json();
@@ -14,7 +13,7 @@ export async function POST(req: NextRequest) {
 
     if (input.type === "professional_search") {
       // Use search-specific logic
-      parsedJson = await extractSearchIntent(input.prompt);
+      parsedJson = await processRecommendationRequest(input.prompt);
     } else {
       // Default: profile creation
       const rawOutput = await processRequest(input.prompt);
@@ -27,7 +26,6 @@ export async function POST(req: NextRequest) {
       parsedJson = JSON.parse(cleanJson);
     }
 
-    console.log("Parsed JSON output:", parsedJson);
     return NextResponse.json(parsedJson, { status: 200 });
   } catch (error) {
     console.error("Error fetching code:", error);
