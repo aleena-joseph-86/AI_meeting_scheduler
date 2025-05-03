@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import styles from "./page.module.scss"; 
+import styles from "./page.module.scss";
 
 type Message = {
   sender: "user" | "bot";
@@ -12,13 +12,13 @@ type Message = {
 
 const botReplies = [
   "Sure. Let's set up your profile. What is your name?",
-  "What is your education background?",
-  "What is your profession?",
-  "What is your domain?",
+  "What is your educational background?",
+  "What is your profession (eg., Full Stack Developer, Frontend Engineer, Backend Engineer)?",
+  "What is your domain (eg., AI/ML, Web Development, E-commerce, SaaS Application, UI/UX etc)?",
   "What are your skills?",
   "What are your top 5 skills?",
   "What is your experience level (beginner, intermediate, experienced)?",
-  "What are your years of experience?",
+  "What many years of experience do you have?",
   "What is your available time?",
   "Please confirm if you want to proceed with the provided information.",
   "Shall we see your profile?",
@@ -145,13 +145,12 @@ export default function Chatbot() {
   const handleProfessionalSearch = async (userInput: string) => {
     setLoading(true);
     try {
-      
       const chatResponse = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           prompt: userInput,
-          type: "professional_search", 
+          type: "professional_search",
         }),
       });
 
@@ -161,18 +160,18 @@ export default function Chatbot() {
 
       const chatData = await chatResponse.json();
       console.log("Chat API response:", chatData);
-      
+
       if (chatData.isRecommendationRequest && chatData.requestedProfession) {
         console.log("Extracted profession:", chatData.requestedProfession);
         console.log("Extracted skills:", chatData.requestedSkills);
-        
+
         const searchResponse = await fetch("/api/searchProfessionals", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             profession: chatData.requestedProfession,
-            skills: chatData.requestedSkills || [], 
-            limit: 5, 
+            skills: chatData.requestedSkills || [],
+            limit: 5,
           }),
         });
 
@@ -182,7 +181,7 @@ export default function Chatbot() {
 
         const professionals = await searchResponse.json();
         console.log("Professionals found:", professionals);
-        
+
         const botResponse: Message = {
           sender: "bot",
           text:
@@ -201,12 +200,11 @@ export default function Chatbot() {
                     ? ` with skills: ${chatData.requestedSkills.join(", ")}`
                     : ""
                 }.`,
-          professionals: professionals, 
+          professionals: professionals,
         };
 
         setMessages((prev) => [...prev, botResponse]);
       } else {
-        
         setMessages((prev) => [
           ...prev,
           {
