@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import styles from "./page.module.scss"; 
+import styles from "./page.module.scss";
+import { getSession } from "next-auth/react";
 
 type Message = {
   sender: "user" | "bot";
@@ -12,13 +13,13 @@ type Message = {
 
 const botReplies = [
   "Sure. Let's set up your profile. What is your name?",
-  "What is your education background?",
-  "What is your profession?",
-  "What is your domain?",
+  "What is your educational background?",
+  "What is your profession (eg., Full Stack Developer, Frontend Engineer, Backend Engineer)?",
+  "What is your domain (eg., AI/ML, Web Development, E-commerce, SaaS Application, UI/UX etc)?",
   "What are your skills?",
   "What are your top 5 skills?",
   "What is your experience level (beginner, intermediate, experienced)?",
-  "What are your years of experience?",
+  "What many years of experience do you have?",
   "What is your available time?",
   "Please confirm if you want to proceed with the provided information.",
   "Shall we see your profile?",
@@ -30,6 +31,8 @@ export default function Chatbot() {
   const [botReplyIndex, setBotReplyIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [isProfileSetup, setIsProfileSetup] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -145,73 +148,60 @@ export default function Chatbot() {
   const handleProfessionalSearch = async (userInput: string) => {
     setLoading(true);
     try {
-      
       const chatResponse = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           prompt: userInput,
-          type: "professional_search", 
+          type: "professional_search",
         }),
       });
 
-      if (!chatResponse.ok) {
-        throw new Error("Chat API request failed");
-      }
+      if (!chatResponse.ok) throw new Error("Chat API request failed");
 
       const chatData = await chatResponse.json();
-      console.log("Chat API response:", chatData);
-      
+
       if (chatData.isRecommendationRequest && chatData.requestedProfession) {
-        console.log("Extracted profession:", chatData.requestedProfession);
-        console.log("Extracted skills:", chatData.requestedSkills);
-        
         const searchResponse = await fetch("/api/searchProfessionals", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             profession: chatData.requestedProfession,
-            skills: chatData.requestedSkills || [], 
-            limit: 5, 
+            skills: chatData.requestedSkills || [],
+            limit: 5,
           }),
         });
 
-        if (!searchResponse.ok) {
+        if (!searchResponse.ok)
           throw new Error("Search professionals API request failed");
-        }
 
         const professionals = await searchResponse.json();
-        console.log("Professionals found:", professionals);
-        
+
         const botResponse: Message = {
           sender: "bot",
           text:
             professionals.length > 0
-              ? `I found ${professionals.length} ${
-                  chatData.requestedProfession
-                } professional${professionals.length > 1 ? "s" : ""}${
+              ? `I found ${professionals.length} ${chatData.requestedProfession} professional${professionals.length > 1 ? "s" : ""}${
                   chatData.requestedSkills?.length > 0
                     ? ` with skills: ${chatData.requestedSkills.join(", ")}`
                     : ""
                 }. Here are the top ${professionals.length}:`
-              : `Sorry, I couldn't find any ${
-                  chatData.requestedProfession
-                } professionals${
+              : `Sorry, I couldn't find any ${chatData.requestedProfession} professionals${
                   chatData.requestedSkills?.length > 0
                     ? ` with skills: ${chatData.requestedSkills.join(", ")}`
                     : ""
                 }.`,
-          professionals: professionals, 
+          professionals,
         };
 
         setMessages((prev) => [...prev, botResponse]);
       } else {
-        
         setMessages((prev) => [
           ...prev,
           {
             sender: "bot",
-            text: "I'm not sure how to help with that request. Could you please specify if you're looking for a professional?",
+            text:
+              "I'm not sure how to help with that request. Could you please specify if you're looking for a professional?",
           },
         ]);
       }
@@ -229,6 +219,63 @@ export default function Chatbot() {
     }
   };
 
+  const handleConnect = async (professional: any) => {
+    const session = await getSession();
+
+    if (!session?.user?.email) {
+      alert("You must be signed in to book a meeting");
+      return;
+    }
+
+    if (!professional.email) {
+      alert("Professional's email not found.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch("/api/connect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          hostEmail: session.user.email,
+          attendeeEmail: professional.email,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        const meetingTime = new Date(data.startTime).toLocaleString();
+        setMessages((prev) => [
+          ...prev,
+          {
+            sender: "bot",
+            text: `Meeting booked with ${professional.name} on ${meetingTime}. Calendar invites sent!`,
+          },
+        ]);
+        setModalMessage(
+          `Meeting successfully scheduled with ${professional.name} on ${meetingTime}.`
+        );
+        setShowModal(true);
+      } else {
+        throw new Error(data.error || "Unknown error");
+      }
+    } catch (err: any) {
+      console.error("Connect failed:", err);
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "bot",
+          text: `Failed to schedule a meeting. ${err.message}`,
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div className="messages">
@@ -238,7 +285,6 @@ export default function Chatbot() {
             className={`message ${msg.sender === "user" ? "user" : "bot"}`}
           >
             {msg.text}
-            {/* Render the list of professionals if present */}
             {msg.sender === "bot" &&
               msg.professionals &&
               msg.professionals.length > 0 && (
@@ -265,8 +311,12 @@ export default function Chatbot() {
                           <strong>Summary:</strong> {prof.summary}
                         </p>
                       )}
-                      {/* Add a connect/book button if needed */}
-                      {/* <button className={styles.connectButton}>Connect</button> */}
+                      <button
+                        className="connectButton"
+                        onClick={() => handleConnect(prof)}
+                      >
+                        Connect
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -280,6 +330,7 @@ export default function Chatbot() {
           </div>
         )}
       </div>
+
       <div className="inputContainer">
         <input
           type="text"
@@ -293,6 +344,16 @@ export default function Chatbot() {
           Send
         </button>
       </div>
+
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Meeting Scheduled 🎉</h2>
+            <p>{modalMessage}</p>
+            <button onClick={() => setShowModal(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
