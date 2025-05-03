@@ -3,6 +3,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import { executeQuery } from '../../lib/database/db';
 
 export default NextAuth({
+  debug: true,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -38,7 +39,10 @@ export default NextAuth({
   },
   events: {
     async signIn({ user, account }) {
-      // Save user info to database when they sign in for the first time
+      console.log('>> SIGN IN TRIGGERED');
+      console.log('user:', user);
+      console.log('account:', account);
+  
       if (account?.provider === 'google') {
         const query = `
           INSERT INTO users (name, email, access_token, refresh_token)
@@ -53,11 +57,9 @@ export default NextAuth({
           account.access_token,
           account.refresh_token,
         ];
-
-        // Make sure the Execute_query method is implemented in your DB utility
         await executeQuery(query, params);
       }
     },
-  },
+  },  
   secret: process.env.NEXTAUTH_SECRET,
 });
