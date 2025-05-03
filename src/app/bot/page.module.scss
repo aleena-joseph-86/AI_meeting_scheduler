@@ -4,6 +4,7 @@
   background-color: #f3f3f3;
   width: 100%;
   height: 90vh;
+  font-family: sans-serif;
 
   .messages {
     flex: 1;
@@ -22,49 +23,49 @@
     &.user {
       background-color: #007bff;
       color: white;
-      align-self: flex-end; // Right side
+      align-self: flex-end;
     }
 
     &.bot {
       background-color: #e0e0e0;
       color: black;
-      align-self: flex-start; // Left side
+      align-self: flex-start;
     }
-  }
 
-  .professionalsList {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-top: 16px;
+    .professionalsList {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 16px;
 
-    .professionalCard {
-      background-color: #f8f9fa;
-      border-radius: 8px;
-      padding: 16px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      .professionalCard {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 16px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-      h3 {
-        margin-top: 0;
-        color: #0070f3;
-      }
+        h3 {
+          margin-top: 0;
+          color: #0070f3;
+        }
 
-      p {
-        margin: 8px 0;
-      }
+        p {
+          margin: 8px 0;
+        }
 
-      .connectButton {
-        background-color: #0070f3;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 8px 16px;
-        margin-top: 8px;
-        cursor: pointer;
-        transition: background-color 0.2s;
+        .connectButton {
+          background-color: #0070f3;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          padding: 8px 16px;
+          margin-top: 8px;
+          cursor: pointer;
+          transition: background-color 0.2s;
 
-        &:hover {
-          background-color: #0051a8;
+          &:hover {
+            background-color: #0051a8;
+          }
         }
       }
     }
@@ -112,9 +113,15 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
 
       &:hover {
         background-color: #0056b3;
+      }
+
+      &:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
       }
     }
   }
