@@ -15,9 +15,19 @@ export async function POST(req: Request) {
   } = await req.json();
 
   const query = `
-  INSERT INTO profiles (name, education, profession, domain, skills, experience, years_of_experience, available_time, summary)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-`;
+    INSERT INTO profiles (
+      name,
+      education,
+      profession,
+      domain,
+      skills,
+      experience,
+      years_of_experience,
+      available_time,
+      summary
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
 
   try {
     const [response] = (await executeQuery(query, [
@@ -34,7 +44,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(response, { status: 200 });
   } catch (error) {
-    console.error(error);
+    console.error("DB insert error:", error);
     return NextResponse.json(
       { error: "Unable to save to DB" },
       { status: 500 }
