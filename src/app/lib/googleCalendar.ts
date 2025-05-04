@@ -11,7 +11,7 @@ const oAuth2Client = new google.auth.OAuth2(
 // Fetch access/refresh token for a user
 async function getAccess(email: string) {
   const [rows] = await executeQuery(
-    'SELECT googleAccessToken, googleRefreshToken FROM users WHERE email = ?',
+    'SELECT access_token, refresh_token FROM users WHERE email = ?',
     [email]
   );
 
@@ -22,8 +22,8 @@ async function getAccess(email: string) {
   const user = Array.isArray(rows) ? rows[0] : rows;
 
   oAuth2Client.setCredentials({
-    access_token: user.googleAccessToken,
-    refresh_token: user.googleRefreshToken,
+    access_token: user.access_token,
+    refresh_token: user.refresh_token,
   });
 
   return oAuth2Client;
@@ -134,4 +134,20 @@ export async function findNearestAvailableTime(attendeeEmails: string[], hoursAh
   }
 
   return { availableFrom: lastEndTime };
+}
+
+// Get user events
+export async function getUserEvents(email: string) {
+  const auth = await getAccess(email);
+  const calendar = google.calendar({ version: 'v3', auth });
+
+  const response = await calendar.events.list({
+    calendarId: 'primary',
+    timeMin: new Date().toISOString(),
+    maxResults: 20,
+    singleEvents: true,
+    orderBy: 'startTime',
+  });
+
+  return response.data.items ?? [];
 }

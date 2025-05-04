@@ -1,3 +1,4 @@
+import { executeQuery } from "@/app/lib/database/db";
 import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -35,5 +36,27 @@ export const options: NextAuthOptions = {
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  events: {
+      async signIn({ user, account }) {
+        console.log('SIGN IN TRIGGERED');
+    
+        if (account?.provider === 'google') {
+          const query = `
+            INSERT INTO users (name, email, access_token, refresh_token)
+            VALUES (?, ?, ?, ?)
+            ON DUPLICATE KEY UPDATE access_token = ?, refresh_token = ?
+          `;
+          const params = [
+            user.name,
+            user.email,
+            account.access_token,
+            account.refresh_token || null,
+            account.access_token,
+            account.refresh_token || null,
+          ];
+          await executeQuery(query, params);
+        }
+      },
+    },  
+    secret: process.env.NEXTAUTH_SECRET,
 };
