@@ -1,8 +1,143 @@
-.homeContainer :global {
-  display: flex;
+$primary: #111827;
+$secondary: #6366f1;
+$light: #f9fafb;
+$text: #4b5563;
 
-  .item {
-    padding: 20px;
-    width: 50%;
+.main {
+  font-family: 'Inter', sans-serif;
+  background-color: $light;
+  color: $text;
+  padding: 0;
+  margin: 0;
+}
+
+.hero {
+  background: linear-gradient(to right, #6366f1, #3b82f6);
+  color: white;
+  padding: 6rem 2rem;
+  text-align: center;
+
+  .content {
+    max-width: 800px;
+    margin: 0 auto;
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+    }
+
+    p {
+      font-size: 1.25rem;
+      margin-top: 1rem;
+      color: #e0e7ff;
+    }
+
+    button {
+      margin-top: 2rem;
+      background: white;
+      color: $primary;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        background: #f3f4f6;
+      }
+    }
+  }
+}
+
+.features, .comparison, .cta {
+  padding: 4rem 2rem;
+  text-align: center;
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: $primary;
+  }
+
+  .grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    margin-top: 2rem;
+  }
+
+  .card {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    text-align: left;
+
+    h3 {
+      color: $secondary;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+  }
+
+  .compareCard, .compareCardActive {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: left;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+
+    h4 {
+      color: $primary;
+      margin-bottom: 0.75rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        padding: 0.5rem 0;
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .compareCardActive {
+    border: 2px solid $secondary;
+    background: #eef2ff;
+  }
+}
+
+.cta {
+  background: #1f2937;
+  color: white;
+
+  h2 {
+    font-size: 2rem;
+    color:#d1d5db;
+  }
+
+  p {
+    color: #d1d5db;
+    margin: 1rem 0 2rem;
+  }
+
+  button {
+    background: $secondary;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+      background: darken($secondary, 10%);
+    }
   }
 }

@@ -1,18 +1,30 @@
-// src/app/login/page.tsx
-import React from 'react';
-import LoginForm from '@/app/components/auth/LoginForm';
+"use client";
 
-export const metadata = {
-  title: 'Login | MyApp',
-};
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import styles from "./login.module.scss";
 
-const LoginPage: React.FC = () => {
+export default function LoginPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/");
+    }
+  }, [status, router]);
+
   return (
-    <div className="login-container">
-      <LoginForm />
+    <div className={styles.wrapper}>
+      <div className={styles.card}>
+        <h1 className={styles.title}>AI Meeting Scheduler</h1>
+        <p className={styles.tagline}>Your intelligent meeting assistant</p>
+        <button className={styles.googleButton} onClick={() => signIn("google", { callbackUrl: "/" })}>
+          <img src="/google-icon.svg" alt="Google" />
+          Sign in with Google
+        </button>
+      </div>
     </div>
   );
-};
-
-export default LoginPage;
-
+}
