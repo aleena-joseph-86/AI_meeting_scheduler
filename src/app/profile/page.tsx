@@ -3,15 +3,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./page.module.scss";
 import { getSession } from "next-auth/react";
-import {
-  FaUser,
-  FaEnvelope,
-  FaInfoCircle,
-  FaBriefcase,
-  FaAward,
-  FaGlobe,
-  FaClock,
-} from "react-icons/fa";
+
 
 interface ProfileData {
   name: string;
@@ -62,30 +54,55 @@ const Profile: React.FC = () => {
 
   return (
     <div className={styles.profileContainer}>
-      <div className={styles.profileHeader}>
-        <h1>Profile</h1>
-        <p>Manage your account and settings</p>
-      </div>
+      <div className={styles.card}>
+        {/* Left Section */}
+        <div className={styles.leftSection}>
+          <div className={styles.photoWrapper}>
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYpIXDQhwlRXpvJNgJCACmhLwL-GM11NtNDw&s"
+              alt="Profile"
+              className={styles.profilePhoto}
+            />
+          </div>
 
-      <div className={styles.profileContent}>
-        <ProfileSection icon={<FaUser />} label="Name" value={profile.name} />
-        <ProfileSection icon={<FaEnvelope />} label="Email" value={profile.email} />
-        <ProfileSection icon={<FaBriefcase />} label="Profession" value={profile.profession} />
-        <ProfileSection icon={<FaGlobe />} label="Domain" value={profile.domain} />
-        <ProfileSection icon={<FaAward />} label="Years of Experience" value={`${profile.years_of_experience} years`} />
-        <ProfileSection icon={<FaClock />} label="Available Time" value={profile.available_time} />
-        <ProfileSection icon={<FaInfoCircle />} label="Education" value={profile.education} />
-        <ProfileSection icon={<FaInfoCircle />} label="Experience" value={profile.experience} />
-        <ProfileSection icon={<FaInfoCircle />} label="Summary" value={profile.summary} />
+          <div className={styles.section}>
+            <h3>Summary</h3>
+            <p>{profile.summary}</p>
+          </div>
 
-        <div className={styles.skillsSection}>
-          <h2>Skills</h2>
-          <div className={styles.skillsList}>
-            {profile.skills.map((skill, index) => (
-              <span key={index} className={styles.skillTag}>
-                {skill}
-              </span>
-            ))}
+          <div className={styles.section}>
+            <h3>Skills</h3>
+            <ul className={styles.skillsList}>
+              {profile.skills.map((skill, index) => (
+                <li key={index} className={styles.skillTag}>
+                  {skill}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Right Section */}
+        <div className={styles.rightSection}>
+          <div className={styles.header}>
+            <div>
+              <h2>{profile.name}</h2>
+              <p>{profile.education}</p>
+            </div>
+          </div>
+
+          <div className={styles.tabs}>
+            <span className={styles.activeTab}>About</span>
+          </div>
+
+          <div className={styles.info}>
+            <ProfileRow label="Name" value={profile.name} />
+            <ProfileRow  label="Email" value={profile.email} />
+            <ProfileRow  label="Profession" value={profile.profession} />
+            <ProfileRow  label="Domain" value={profile.domain} />
+            <ProfileRow  label="Experience" value={profile.experience} />
+            <ProfileRow  label="Available Time" value={profile.available_time} />
+            <ProfileRow  label="Years of Experience" value={`${profile.years_of_experience} years`} />
           </div>
         </div>
       </div>
@@ -93,20 +110,17 @@ const Profile: React.FC = () => {
   );
 };
 
-interface ProfileSectionProps {
-  icon: React.ReactNode;
+interface ProfileRowProps {
   label: string;
   value: string;
 }
 
-const ProfileSection: React.FC<ProfileSectionProps> = ({ icon, label, value }) => (
-  <div className={styles.profileSection}>
-    <div className={styles.profileLabel}>
-      <span className={styles.icon}>{icon}</span>
-      <span className={styles.labelText}>{label}</span>
-      <span className={styles.colon}>:</span>
-    </div>
-    <p>{value}</p>
+const ProfileRow: React.FC<ProfileRowProps> = ({ label, value }) => (
+  <div className={styles.infoRow}>
+    <strong>
+      {label}
+    </strong>
+    <span>{value}</span>
   </div>
 );
 
