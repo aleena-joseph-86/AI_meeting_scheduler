@@ -3,7 +3,9 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const {
+    email,
     name,
+    image_url,
     education,
     profession,
     domain,
@@ -13,10 +15,22 @@ export async function POST(req: Request) {
     available_time,
     summary,
   } = await req.json();
-
+//  console.log( email,
+//   name,
+//   image_url,
+//   education,
+//   profession,
+//   domain,
+//   skills,
+//   experience,
+//   years_of_experience,
+//   available_time,
+//   summary);
   const query = `
     INSERT INTO profiles (
+      email,
       name,
+      image_url,
       education,
       profession,
       domain,
@@ -26,12 +40,14 @@ export async function POST(req: Request) {
       available_time,
       summary
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   try {
     const [response] = (await executeQuery(query, [
+      email || null,
       name || null,
+      image_url || null,
       education || null,
       profession || null,
       domain || null,

@@ -15,7 +15,7 @@
     "framer-motion": "^12.7.4",
     "googleapis": "^146.0.0",
     "lucide-react": "^0.501.0",
-    "mysql2": "^3.14.0",
+    "mysql2": "^3.14.1",
     "next": "15.3.1",
     "next-auth": "^4.24.11",
     "openai": "^4.86.1",

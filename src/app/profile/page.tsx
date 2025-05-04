@@ -1,93 +1,108 @@
 "use client";
-import React, { useState, ChangeEvent } from "react";
+
+import React, { useEffect, useState } from "react";
 import styles from "./page.module.scss";
+import { getSession } from "next-auth/react";
+
+
+interface ProfileData {
+  name: string;
+  email: string;
+  education: string;
+  profession: string;
+  domain: string;
+  skills: string[];
+  experience: string;
+  years_of_experience: number;
+  available_time: string;
+  summary: string;
+}
 
 const Profile: React.FC = () => {
-  const [photo, setPhoto] = useState<string>(
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYpIXDQhwlRXpvJNgJCACmhLwL-GM11NtNDw&s"
-  );
-  const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState("Vishalini Kamaraj");
-  const [email, setEmail] = useState("vishalinikamaraj286@gmail.com");
-  const [phone, setPhone] = useState("123 456 7890");
-  const [profession, setProfession] = useState("MEAN Stack & Next.js Developer");
+  const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const handlePhotoUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhoto(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const session = await getSession();
+        const email = session?.user?.email;
+
+        if (!email) {
+          console.error("No email in session");
+          return;
+        }
+
+        const res = await fetch(`/api/profile?email=${email}`);
+        const data = await res.json();
+
+        if (data) {
+          setProfile(data);
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      } finally {
+        setLoading(false);
+      }
     }
-  };
 
-  const handleEditToggle = () => {
-    setIsEditing((prev) => !prev);
-  };
+    fetchProfile();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (!profile) return <div>No profile found. Please create your profile!</div>;
 
   return (
     <div className={styles.profileContainer}>
       <div className={styles.card}>
+        {/* Left Section */}
         <div className={styles.leftSection}>
           <div className={styles.photoWrapper}>
-            <img src={photo} alt="Profile" className={styles.profilePhoto} />
-            <label htmlFor="photoUpload" className={styles.changePhoto}>
-              Change Photo
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              id="photoUpload"
-              style={{ display: "none" }}
-              onChange={handlePhotoUpload}
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYpIXDQhwlRXpvJNgJCACmhLwL-GM11NtNDw&s"
+              alt="Profile"
+              className={styles.profilePhoto}
             />
           </div>
 
           <div className={styles.section}>
-            <h3>summary</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, accusamus maxime delectus aliquid repellat rem ratione minima eligendi amet id illum soluta asperiores optio, molestiae voluptatum omnis iure maiores laudantium.</p>
+            <h3>Summary</h3>
+            <p>{profile.summary}</p>
           </div>
 
           <div className={styles.section}>
             <h3>Skills</h3>
-            <ul>
-              <li>Web Designer</li>
-              <li>Web Developer</li>
-              <li>WordPress</li>
-              <li>WooCommerce</li>
-              <li>PHP, .Net</li>
+            <ul className={styles.skillsList}>
+              {profile.skills.map((skill, index) => (
+                <li key={index} className={styles.skillTag}>
+                  {skill}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
 
+        {/* Right Section */}
         <div className={styles.rightSection}>
           <div className={styles.header}>
             <div>
-              {isEditing ? (
-                <input value={name} onChange={(e) => setName(e.target.value)} />
-              ) : (
-                <h2>{name}</h2>
-              )}
-              <p>3rd Year BE CSE Student</p>
+              <h2>{profile.name}</h2>
+              <p>{profile.education}</p>
             </div>
-            <button className={styles.editBtn} onClick={handleEditToggle}>
-              {isEditing ? "Save Profile" : "Edit Profile"}
-            </button>
           </div>
 
           <div className={styles.tabs}>
             <span className={styles.activeTab}>About</span>
-            {/* <span className={styles.inactiveTab}>Timeline</span> */}
           </div>
 
           <div className={styles.info}>
-            <InfoRow label="User ID" value="Visha123" />
-            <InfoRow label="Name" value={name} editable={isEditing} onChange={setName} />
-            <InfoRow label="Email" value={email} editable={isEditing} onChange={setEmail} />
-            <InfoRow label="Phone" value={phone} editable={isEditing} onChange={setPhone} />
-            <InfoRow label="Profession" value={profession} editable={isEditing} onChange={setProfession} />
+            <ProfileRow label="Name" value={profile.name} />
+            <ProfileRow  label="Email" value={profile.email} />
+            <ProfileRow  label="Profession" value={profile.profession} />
+            <ProfileRow  label="Domain" value={profile.domain} />
+            <ProfileRow  label="Experience" value={profile.experience} />
+            <ProfileRow  label="Available Time" value={profile.available_time} />
+            <ProfileRow  label="Years of Experience" value={`${profile.years_of_experience} years`} />
           </div>
         </div>
       </div>
@@ -95,21 +110,17 @@ const Profile: React.FC = () => {
   );
 };
 
-interface InfoRowProps {
+interface ProfileRowProps {
   label: string;
   value: string;
-  editable?: boolean;
-  onChange?: (val: string) => void;
 }
 
-const InfoRow: React.FC<InfoRowProps> = ({ label, value, editable = false, onChange }) => (
+const ProfileRow: React.FC<ProfileRowProps> = ({ label, value }) => (
   <div className={styles.infoRow}>
-    <strong>{label}</strong>
-    {editable && onChange ? (
-      <input value={value} onChange={(e) => onChange(e.target.value)} />
-    ) : (
-      <span>{value}</span>
-    )}
+    <strong>
+      {label}
+    </strong>
+    <span>{value}</span>
   </div>
 );
 
