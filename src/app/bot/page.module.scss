@@ -124,6 +124,26 @@
         cursor: not-allowed;
       }
     }
+
+    .newChatButton {
+      margin-left: 8px;
+      padding: 10px 16px;
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+
+      &:hover {
+        background-color: #5a6268;
+      }
+
+      &:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+    }
   }
 }
 

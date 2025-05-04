@@ -25,8 +25,13 @@ const botReplies = [
   "Shall we see your profile?",
 ];
 
+const initialBotMessage: Message = {
+  sender: "bot",
+  text: "Hi there! I'm your personal assistant. Do you wanna set up a profile or look for a professional?",
+};
+
 export default function Chatbot() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([initialBotMessage]);
   const [input, setInput] = useState("");
   const [botReplyIndex, setBotReplyIndex] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -35,13 +40,15 @@ export default function Chatbot() {
   const [modalMessage, setModalMessage] = useState("");
   const router = useRouter();
 
-  useEffect(() => {
-    const initialMessage: Message = {
-      sender: "bot",
-      text: "Hi there! I'm your personal assistant. Do you wanna set up a profile or look for a professional?",
-    };
-    setMessages([initialMessage]);
-  }, []);
+  const handleNewChat = () => {
+    setMessages([initialBotMessage]);
+    setInput("");
+    setBotReplyIndex(0);
+    setLoading(false);
+    setIsProfileSetup(false);
+    setShowModal(false);
+    setModalMessage("");
+  };
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -51,7 +58,7 @@ export default function Chatbot() {
     const userInput = input.toLowerCase();
     setInput("");
 
-    const isFirstRealMessage = botReplyIndex === 0 && messages.length === 1;
+    const isFirstRealMessage = messages.length === 1;
 
     if (isFirstRealMessage) {
       if (userInput.includes("profile") || userInput.includes("set up")) {
@@ -141,7 +148,9 @@ export default function Chatbot() {
         }
       }
     } else {
-      await handleProfessionalSearch(input);
+      if (!isFirstRealMessage) {
+        await handleProfessionalSearch(input);
+      }
     }
   };
 
@@ -181,12 +190,16 @@ export default function Chatbot() {
           sender: "bot",
           text:
             professionals.length > 0
-              ? `I found ${professionals.length} ${chatData.requestedProfession} professional${professionals.length > 1 ? "s" : ""}${
+              ? `I found ${professionals.length} ${
+                  chatData.requestedProfession
+                } professional${professionals.length > 1 ? "s" : ""}${
                   chatData.requestedSkills?.length > 0
                     ? ` with skills: ${chatData.requestedSkills.join(", ")}`
                     : ""
                 }. Here are the top ${professionals.length}:`
-              : `Sorry, I couldn't find any ${chatData.requestedProfession} professionals${
+              : `Sorry, I couldn't find any ${
+                  chatData.requestedProfession
+                } professionals${
                   chatData.requestedSkills?.length > 0
                     ? ` with skills: ${chatData.requestedSkills.join(", ")}`
                     : ""
@@ -200,8 +213,7 @@ export default function Chatbot() {
           ...prev,
           {
             sender: "bot",
-            text:
-              "I'm not sure how to help with that request. Could you please specify if you're looking for a professional?",
+            text: "I'm not sure how to help with that request. Could you please specify if you're looking for a professional?",
           },
         ]);
       }
@@ -339,9 +351,17 @@ export default function Chatbot() {
           onChange={(e) => setInput(e.target.value)}
           disabled={loading}
           className="chatInput"
+          onKeyDown={(e) => e.key === "Enter" && !loading && sendMessage()}
         />
         <button onClick={sendMessage} disabled={loading} className="sendButton">
           Send
+        </button>
+        <button
+          onClick={handleNewChat}
+          disabled={loading}
+          className="newChatButton"
+        >
+          New Chat
         </button>
       </div>
 
