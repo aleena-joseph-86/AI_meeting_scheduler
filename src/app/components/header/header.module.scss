@@ -11,8 +11,7 @@
   left: 0;
   right: 0;
   z-index: 40;
-
-
+  font-family: 'Inter', sans-serif;
 }
 
 .left {
@@ -47,6 +46,7 @@
 
 .userName {
   font-weight: 500;
+  margin-right: 10px;
 }
 
 .signInButton {

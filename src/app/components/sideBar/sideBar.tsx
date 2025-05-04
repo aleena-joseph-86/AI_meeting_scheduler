@@ -20,8 +20,8 @@ export default function Sidebar({ isOpen }: SidebarProps) {
         <ul>
           <li>
             <Link
-              href="/home"
-              className={pathname === "/home" ? styles.activeLink : ""}
+              href="/"
+              className={pathname === "/" ? styles.activeLink : ""}
             >
               <AiFillHome /> Home
             </Link>
