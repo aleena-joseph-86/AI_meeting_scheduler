@@ -117,9 +117,14 @@ export default function Chatbot() {
           });
 
           const data = await res.json();
-
+          const session = await getSession();
+          const session_email = session?.user?.email;
+          const session_image_url = session?.user?.image;
+          // console.log(session_email, session_image_url);
           const profileData = {
+            email:session_email,
             name: data.name,
+            image_url:session_image_url,
             education: data.education,
             profession: data.profession,
             domain: data.domain,
