@@ -4,6 +4,13 @@ import React, { useEffect, useState } from "react";
 import styles from "./page.module.scss";
 import { getSession } from "next-auth/react";
 
+// Loader component with animated dots
+const Loader: React.FC = () => (
+  <div className={styles.loaderWrapper}>
+    <div className={styles.loader}></div>
+    <span className={styles.loaderText}>Loading</span>
+  </div>
+);
 
 interface ProfileData {
   name: string;
@@ -49,7 +56,7 @@ const Profile: React.FC = () => {
     fetchProfile();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loader />;
   if (!profile) return <div>No profile found. Please create your profile!</div>;
 
   return (
@@ -97,12 +104,15 @@ const Profile: React.FC = () => {
 
           <div className={styles.info}>
             <ProfileRow label="Name" value={profile.name} />
-            <ProfileRow  label="Email" value={profile.email} />
-            <ProfileRow  label="Profession" value={profile.profession} />
-            <ProfileRow  label="Domain" value={profile.domain} />
-            <ProfileRow  label="Experience" value={profile.experience} />
-            <ProfileRow  label="Available Time" value={profile.available_time} />
-            <ProfileRow  label="Years of Experience" value={`${profile.years_of_experience} years`} />
+            <ProfileRow label="Email" value={profile.email} />
+            <ProfileRow label="Profession" value={profile.profession} />
+            <ProfileRow label="Domain" value={profile.domain} />
+            <ProfileRow label="Experience" value={profile.experience} />
+            <ProfileRow label="Available Time" value={profile.available_time} />
+            <ProfileRow
+              label="Years of Experience"
+              value={`${profile.years_of_experience} years`}
+            />
           </div>
         </div>
       </div>
@@ -117,9 +127,7 @@ interface ProfileRowProps {
 
 const ProfileRow: React.FC<ProfileRowProps> = ({ label, value }) => (
   <div className={styles.infoRow}>
-    <strong>
-      {label}
-    </strong>
+    <strong>{label}</strong>
     <span>{value}</span>
   </div>
 );

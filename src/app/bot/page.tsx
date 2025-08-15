@@ -3,6 +3,14 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./page.module.scss";
+
+// Loader component (same as profile page)
+const Loader: React.FC = () => (
+  <div className={styles.loaderWrapper}>
+    <div className={styles.loader}></div>
+    <span className={styles.loaderText}>Loading</span>
+  </div>
+);
 import { getSession } from "next-auth/react";
 
 type Message = {
@@ -122,9 +130,9 @@ export default function Chatbot() {
           const session_image_url = session?.user?.image;
 
           const profileData = {
-            email:session_email,
+            email: session_email,
             name: data.name,
-            image_url:session_image_url,
+            image_url: session_image_url,
             education: data.education,
             profession: data.profession,
             domain: data.domain,
@@ -340,12 +348,7 @@ export default function Chatbot() {
               )}
           </div>
         ))}
-        {loading && (
-          <div className={styles.loader}>
-            <div className={styles.spinner}></div>
-            Loading...
-          </div>
-        )}
+        {loading && <Loader />}
       </div>
 
       <div className="inputContainer">
