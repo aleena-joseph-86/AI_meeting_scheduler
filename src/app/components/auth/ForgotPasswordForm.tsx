@@ -15,7 +15,6 @@ const ForgotPasswordForm: React.FC = () => {
     setLoading(true);
 
     setTimeout(() => {
-      console.log({ email });
       setLoading(false);
     }, 2000);
   };

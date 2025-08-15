@@ -39,9 +39,7 @@ export default NextAuth({
   },
   events: {
     async signIn({ user, account }) {
-      console.log('>> SIGN IN TRIGGERED');
-      console.log('user:', user);
-      console.log('account:', account);
+
   
       if (account?.provider === 'google') {
         const query = `

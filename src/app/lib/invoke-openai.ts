@@ -5,8 +5,6 @@ export class InvokeOpenAI implements InvokeLLM {
   async invoke(prompt: string): Promise<any> {
     const openai = getOpenAI();
 
-    console.log(`Invoking OpenAI...`);
-
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [

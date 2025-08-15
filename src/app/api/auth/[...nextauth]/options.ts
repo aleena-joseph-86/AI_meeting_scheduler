@@ -38,7 +38,6 @@ export const options: NextAuthOptions = {
   },
   events: {
       async signIn({ user, account }) {
-        console.log('SIGN IN TRIGGERED');
     
         if (account?.provider === 'google') {
           const query = `

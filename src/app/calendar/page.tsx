@@ -13,7 +13,6 @@ export default async function CalendarPage() {
   }
 
   const events = await getUserEvents(session.user.email);
-  console.log("events: ",events);
 
   return (
     <div className={styles.container}>

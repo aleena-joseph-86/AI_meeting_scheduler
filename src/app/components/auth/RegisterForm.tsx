@@ -17,7 +17,6 @@ const RegisterForm: React.FC = () => {
     setLoading(true);
 
     setTimeout(() => {
-      console.log({ email, password, confirmPassword });
       setLoading(false);
     }, 2000);
   };

@@ -4,9 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     const { profession, skills, limit = 5 } = await req.json();
-    console.log("Received profession:", profession);
-    console.log("Received skills (ignored for filtering):", skills);
-    console.log("Received limit:", limit);
 
     if (!profession) {
       return NextResponse.json(
@@ -38,11 +35,7 @@ export async function POST(req: NextRequest) {
 
     const params: (string | number)[] = [`%${normalizedProfession}%`, limit];
 
-    console.log("Final SQL Query:", query);
-    console.log("Final SQL Params:", params);
-
     const [rows] = await executeQuery(query, params);
-    console.log("Raw DB Results:", rows);
 
     const profiles = (rows as any[]).map((profile) => ({
       ...profile,

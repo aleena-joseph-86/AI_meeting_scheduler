@@ -16,7 +16,6 @@ const ResetPasswordForm: React.FC = () => {
     setLoading(true);
 
     setTimeout(() => {
-      console.log({ password, confirmPassword });
       setLoading(false);
     }, 2000);
   };

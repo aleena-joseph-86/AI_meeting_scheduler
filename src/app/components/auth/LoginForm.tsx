@@ -16,7 +16,6 @@ const LoginForm: React.FC = () => {
     setLoading(true);
 
     setTimeout(() => {
-      console.log({ email, password });
       setLoading(false);
     }, 2000);
   };

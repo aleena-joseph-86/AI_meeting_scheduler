@@ -15,17 +15,6 @@ export async function POST(req: Request) {
     available_time,
     summary,
   } = await req.json();
-//  console.log( email,
-//   name,
-//   image_url,
-//   education,
-//   profession,
-//   domain,
-//   skills,
-//   experience,
-//   years_of_experience,
-//   available_time,
-//   summary);
   const query = `
     INSERT INTO profiles (
       email,
